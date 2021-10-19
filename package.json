@@ -10,6 +10,9 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-node-resolve": "^7.0.0",
+    "autoprefixer": "^10.3.7",
+    "postcss": "^8.3.9",
+    "postcss-import": "^14.0.2",
     "rollup": "^1.20.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-svelte": "^5.0.3",
@@ -17,6 +20,10 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4"
+    "@fullhuman/postcss-purgecss": "^4.0.3",
+    "@tinymce/tinymce-svelte": "^0.1.1",
+    "rollup-plugin-postcss": "^4.0.1",
+    "sirv-cli": "^0.4.4",
+    "tailwindcss": "^2.2.17"
   }
 }

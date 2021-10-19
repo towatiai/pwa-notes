@@ -1,4 +1,5 @@
 import svelte from 'rollup-plugin-svelte';
+import postcss from "rollup-plugin-postcss";
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
@@ -15,6 +16,9 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		postcss({
+			extract: true
+		}),
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,

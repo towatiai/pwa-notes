@@ -1,11 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const Note = require("./note");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static("build"));
+app.use(express.static(path.join(__dirname, "../frontend/public")));
 
 app.get("/api/notes", async (req, res) => {
   const result = await Note.find({});

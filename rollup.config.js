@@ -8,12 +8,12 @@ import { terser } from 'rollup-plugin-terser';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-	input: 'src/main.js',
+	input: 'frontend/src/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		file: 'frontend/public/build/bundle.js'
 	},
 	plugins: [
 		postcss({
@@ -25,7 +25,7 @@ export default {
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			css: css => {
-				css.write('public/build/bundle.css');
+				css.write('frontend/public/build/bundle.css');
 			}
 		}),
 
@@ -65,7 +65,7 @@ function serve() {
 			if (!started) {
 				started = true;
 
-				require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+				require('child_process').spawn('npm', ['run', 'front-start'], {
 					stdio: ['ignore', 'inherit', 'inherit'],
 					shell: true
 				});

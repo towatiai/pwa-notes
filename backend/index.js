@@ -19,8 +19,8 @@ app.post("/api/notes", async (req, res) => {
   if (!body.title || !body.content) {
     res.status(400).send("Invalid request");
   } else {
-    await new Note({ title: body.title, content: body.content }).save();
-    res.sendStatus(200);
+    const note = await new Note({ title: body.title, content: body.content }).save();
+    res.json(note);
   }
 });
 
@@ -33,9 +33,9 @@ app.put("/api/notes/:id", async (req, res) => {
     const entry = await Note.findByIdAndUpdate(req.params.id, {
       title: body.title,
       content: body.content,
-    });
+    }, {new: true});
     if (entry) {
-      res.sendStatus(200);
+      res.json(entry);
     } else {
       res.sendStatus(404);
     }

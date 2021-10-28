@@ -4,7 +4,7 @@
   "scripts": {
     "build": "rollup -c | npm run back-start",
     "front-dev": "rollup -c -w",
-    "front-start": "sirv frontend/public --port 3000",
+    "front-start": "sirv frontend/public",
     "back-dev": "nodemon backend/index.js",
     "back-start": "node backend/index.js"
   },

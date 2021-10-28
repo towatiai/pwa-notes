@@ -24,9 +24,6 @@ export default {
 			dev: !production,
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
-			css: css => {
-				css.write('frontend/public/build/bundle.css');
-			}
 		}),
 
 		// If you have external dependencies installed from
@@ -46,7 +43,7 @@ export default {
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('public'),
+		!production && livereload('frontend/public'),
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
@@ -65,7 +62,7 @@ function serve() {
 			if (!started) {
 				started = true;
 
-				require('child_process').spawn('npm', ['run', 'front-start'], {
+				require('child_process').spawn('npm', ['run', 'front-start', '--', '--dev'], {
 					stdio: ['ignore', 'inherit', 'inherit'],
 					shell: true
 				});

@@ -1,34 +1,26 @@
 <script>
 	import "./tailwind.css";
-	import Editor from "@tinymce/tinymce-svelte";
+	import Router from "svelte-spa-router";
+	import Home from "./views/Home.svelte";
+	import Note from "./views/Note.svelte";
+	import { init } from "./data/notes";
 
-	export let name;
+	const initApp = async () => {
+		await init();
+	}
+
 </script>
 
-<main>
-	<h1 class="bg-black text-white">Editor</h1>
-	<Editor 
-		apiKey="v34y02hyvtu5epc1jl8he4fnk802k38gbu48ae0o7ld2zqod"
-	/>
-</main>
-
-<style>
-	main {
-		text-align: center;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
+<main style="height: 100vh; max-width: 720px;" class="m-auto bg-gray-100">
+	{ #await initApp() }
+	<p>Loading...</p>
+	{ :then value } 
+	<Router routes={{
+		'/': Home,
+		'/note': Note,
+		'/note/:id': Note
+	}}/>
+	{ :catch error }
+	<p>{error}</p>
+	{ /await }
+</main> 

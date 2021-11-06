@@ -10,6 +10,7 @@ module.exports = {
     production &&
       purgecss({
         content: ["./**/*.html", "./**/*.svelte"],
+        whitelistPatterns: [/svelte-/],
         defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
       })
   ]

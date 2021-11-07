@@ -13,6 +13,12 @@ app.get("/api/notes", async (req, res) => {
   res.json(result);
 });
 
+app.post("/api/notes/sync", async (req, res) => {
+  const body = req.body;
+
+  console.log(body);
+});
+
 app.post("/api/notes", async (req, res) => {
   const body = req.body;
 

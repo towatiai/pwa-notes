@@ -7,6 +7,19 @@ const getNotes = async () => {
     }
 }
 
+const synchronize = async (notes) => {
+    const response = await fetch(`${baseUrl}/sync`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(notes),
+    });
+    if (response && response.ok) {
+        return response.json();
+    }
+}
+
 const createNote = async (newNote) => {
     const response = await fetch(baseUrl, {
         method: 'POST',
@@ -33,4 +46,4 @@ const editNote = async (id, newNote) => {
     }
 }
 
-export default { getNotes, createNote, editNote };
+export default { getNotes, createNote, editNote, synchronize };

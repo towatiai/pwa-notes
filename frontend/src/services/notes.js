@@ -15,6 +15,9 @@ const synchronize = async (notes) => {
         },
         body: JSON.stringify(notes),
     });
+    if (response.status === 500) {
+        throw new Error("Unable to synchronize.");
+    }
     if (response && response.ok) {
         return response.json();
     }
@@ -46,4 +49,13 @@ const editNote = async (id, newNote) => {
     }
 }
 
-export default { getNotes, createNote, editNote, synchronize };
+const deleteNote = async (id) => {
+    const response = await fetch(`${baseUrl}/${id}`, {
+        method: 'DELETE'
+    });
+    if (response && response.ok) {
+        return response.json();
+    }
+}
+
+export default { getNotes, createNote, editNote, synchronize, deleteNote };

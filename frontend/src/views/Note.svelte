@@ -1,7 +1,6 @@
 <script>
-import { onMount } from "svelte";
-
-	import { replace } from "svelte-spa-router";
+	import { replace, location } from "svelte-spa-router";
+	import {get} from "svelte/store";
 	import * as notes from "../data/notes";
 	export let params = {};
 	let isNewNote = typeof params.id === "undefined";
@@ -19,13 +18,17 @@ import { onMount } from "svelte";
 				content: "",
 			};
 		} else {
-			note = await notes.getById(params.id);
+			console.log(get(location))
+			note = await notes.getById(params.id, get(location).includes("local"));
 			console.log(note);
 		}
 	};
 
 	const save = async () => {
 		if (note.title || note.content) {
+
+			// hasChanged flad is cleared once the server has successfully updated the database.
+			note.hasChanged = true;
 			if (isNewNote) {
 				await notes.add(note);
 			} else {
@@ -118,16 +121,6 @@ import { onMount } from "svelte";
 			style="height: {window.innerHeight - topHeight - 24}px"
 			placeholder="Write here..."
 		/>
-
-		<!-- 
-	<Editor
-		apiKey="v34y02hyvtu5epc1jl8he4fnk802k38gbu48ae0o7ld2zqod"
-		conf={{
-			menubar: false,
-			height: window.innerHeight - topHeight - 24
-		}}
-	/>
-	-->
 	</div>
 {/await}
 

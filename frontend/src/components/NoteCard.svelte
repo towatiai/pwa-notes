@@ -1,28 +1,31 @@
 <script>
     import { push } from "svelte-spa-router";
 
-    export let title;
-    export let content;
-    export let id;
+    export let note;
     export let removeNote;
 
     const openNote = () => {
-        push(`/note/${id}`);
+        if (note._id) {
+            push(`/note/${note._id}`);
+        } else {
+            push(`/note/local/${note.id}`)
+        }
+        
     };
 </script>
 
 <div
-    class="group bg-white px-4 py-3 rounded-lg border-blue-300 border-l-8 cursor-pointer mb-2"
+    class="group bg-white px-4 py-3 rounded-lg border-l-8 cursor-pointer mb-2 border-blue-300"
     on:click={openNote}
 >
     <div class="flex justify-between">
-        {#if title}
-            <h2 class="mb-1 truncate">{title}</h2>
+        {#if note.title}
+            <h2 class="mb-1 truncate">{note.title}</h2>
         {:else}
             <h2 class="mb-1 text-gray-400">No title</h2>
         {/if}
         <button class="group-hover:opacity-100 opacity-0 duration-200 text-gray-400 hover:text-red-600"
-            on:click|stopPropagation={() => removeNote(id)}>
+            on:click|stopPropagation={() => removeNote(note)}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
@@ -41,8 +44,8 @@
     </div>
     
     
-    {#if content}
-        <p class="truncate text-sm text-gray-700">{content}</p>
+    {#if note.content}
+        <p class="truncate text-sm text-gray-700">{note.content}</p>
     {:else}
         <p class="text-sm text-gray-400">No content</p>
     {/if}

@@ -6,6 +6,7 @@
 
     import NoteCard from "../components/NoteCard.svelte";
     import * as notesIDB from "../data/notes";
+    import { isOnline } from "../stores/connection.store";
 
     let notesList = [];
 
@@ -20,7 +21,9 @@
     // Separate async function to keep onMount synchronous.
     // See: https://github.com/sveltejs/svelte/issues/4927
     const loadNotes = async () => {
-        notesList = await notesIDB.getAll();
+        notesList = (await notesIDB.getAll())
+        console.table(notesList);
+        notesList= notesList.filter(n => !n.deleted);
         console.log("Notes loaded!", notesList)
     };
 
@@ -37,10 +40,10 @@
         //fetchNotes();
     });
 
-    const removeNote = async (id) => {
-        await notesIDB.deleteById(id);
+    const removeNote = async (note) => {
+        await notesIDB.deleteNote(note);
 
-        notesList = notesList.filter(note => note.id !== parseInt(id));
+        notesList = notesList.filter(n => n.id !== parseInt(note.id));
     };
 
     const synchronize = async () => {
@@ -51,12 +54,12 @@
 <div class="p-4">
     <div class="flex justify-between mb-3">
         <h1 class="text-3xl">Notes</h1>
-        <!-- 
-        <button class="bg-blue-500 text-white px-4 py-2 rounded-2xl hover:bg-blue-700 duration-75"
-            on:click={synchronize}>
-            Synchronize
-        </button>
-        -->
+        { #if !$isOnline }
+        <div class="flex text-gray-600">
+            <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+            <p>Offline</p> 
+        </div>
+        { /if }
         <button class="bg-blue-500 text-white px-4 py-2 rounded-2xl hover:bg-blue-700 duration-75"
             on:click={() => push("/note")}>
             New note
@@ -65,10 +68,15 @@
     
     { #each notesList as note }
     <div in:fly={{ y: 60 }} >
-        <NoteCard title={note.title} content={note.content} id={note.id} removeNote={removeNote}/>
+        <NoteCard {note}
+                  removeNote={removeNote}/>
     </div>
     { /each }
     { #if notesList.length === 0} 
     <p class="my-4">No notes.</p>
     { /if }
+</div>
+<div class="absolute right-1 bottom-1 flex">
+    <p class="mr-2">Online</p>
+    <input type="checkbox" bind:checked={ $isOnline }/>
 </div>

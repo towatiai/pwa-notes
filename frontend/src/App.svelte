@@ -18,7 +18,8 @@
 	<Router routes={{
 		'/': Home,
 		'/note': Note,
-		'/note/:id': Note
+		'/note/:id': Note,
+		'/note/local/:id': Note
 	}}/>
 	{ :catch error }
 	<p>{error}</p>

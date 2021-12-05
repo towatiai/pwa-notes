@@ -40,18 +40,24 @@ self.addEventListener('activate', (evt) => {
 
 self.addEventListener('fetch', (evt) => {
   console.log('[ServiceWorker] Fetch', evt.request.url);
-  // Add fetch event handler here.
-  if (evt.request.mode !== 'navigate') {
-    // Not a page navigation, bail.
-    return;
-  }
-  evt.respondWith(
-      fetch(evt.request)
-          .catch(() => {
-            return caches.open(CACHE_NAME)
-                .then((cache) => {
-                  return cache.match('offline.html');
-                });
-          })
-  );
+  evt.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    try {
+      console.log('fetching url: ', evt.request.url);
+      const responsePromise = fetch(evt.request);
+      const response = await responsePromise;
+      console.log('updating cache...');
+      await cache.put(evt.request, response.clone());
+      return responsePromise;
+    } catch (e) {
+      console.log('fetching failed, searching cache for: ', evt.request.url);
+      const matchPromise = cache.match(evt.request);
+      const match = await matchPromise;
+      if (match) {
+        return matchPromise;
+      } else {
+        console.log('match not found in cache for: ', evt.request.url);
+      }
+    }
+  })());
 });

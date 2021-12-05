@@ -11,7 +11,7 @@
 
 </script>
 
-<main style="height: 100vh; max-width: 720px;" class="m-auto bg-gray-100">
+<main style="min-height: 100vh; max-width: 720px;" class="m-auto bg-gray-100">
 	{ #await initApp() }
 	<p>Loading...</p>
 	{ :then value } 

@@ -1,6 +1,6 @@
 const Note = require("../../backend/note");
 
-export default async (req, res) => {
+module.exports = async (req, res) => {
     const body = req.body;
 
     let operations = [];

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "rollup -c",
-    "front-dev": "rollup -c -w",
+    "dev": "rollup -c -w",
     "front-start": "sirv frontend/public --port 3000 --dev",
     "back-dev": "nodemon backend/index.js",
     "back-start": "node backend/index.js"

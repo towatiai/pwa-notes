@@ -5,11 +5,11 @@ module.exports = async (req, res) => {
     switch (req.method) {
 
         case "PUT":
-            await put(res, id, req.body);
+            await put(req, res);
             break;
 
         case "DELETE":
-            await deleteNote(id);
+            await deleteNote(req, res);
             break;
 
     }
@@ -17,7 +17,9 @@ module.exports = async (req, res) => {
 }
 
 
-async function put(res, id, body) {
+async function put(req, res) {
+    const { query: {id}, body} = req;
+
     if (!body.title && !body.content) {
         res.status(400).send("Invalid request");
     } else {
@@ -34,7 +36,9 @@ async function put(res, id, body) {
 }
 
 
-async function deleteNote(res, id) {
+async function deleteNote(req, res) {
+    const id = req.query.id;
+
     const result = await Note.deleteOne({ "_id": id });
     if (result.deletedCount) {
         res.json(result);

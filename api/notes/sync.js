@@ -1,4 +1,4 @@
-const Note = require("./note");
+const Note = require("../../backend/note");
 
 export default async (req, res) => {
     const body = req.body;

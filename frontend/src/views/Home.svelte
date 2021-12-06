@@ -76,7 +76,9 @@
     <p class="my-4">No notes.</p>
     { /if }
 </div>
+<!--
 <div class="absolute right-1 bottom-1 flex">
     <p class="mr-2">Online</p>
     <input type="checkbox" bind:checked={ $isOnline }/>
 </div>
+-->

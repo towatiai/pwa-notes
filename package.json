@@ -2,7 +2,7 @@
   "name": "pwa-notes",
   "version": "0.0.1",
   "scripts": {
-    "build": "rollup -c | npm run back-start",
+    "build": "rollup -c",
     "front-dev": "rollup -c -w",
     "front-start": "sirv frontend/public --port 3000 --dev",
     "back-dev": "nodemon backend/index.js",
@@ -31,7 +31,6 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "@tinymce/tinymce-svelte": "^0.1.1",
     "idb": "^6.1.5",
     "svelte-preprocess": "^4.9.8",
     "svelte-spa-router": "^3.2.0",

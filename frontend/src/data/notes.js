@@ -36,7 +36,7 @@ export async function init() {
     });
     console.log(db.objectStoreNames);
 
-    if (isOnline) {
+    if (get(isOnline)) {
         await synchronize();
     }
 

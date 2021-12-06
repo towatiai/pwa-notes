@@ -5,7 +5,9 @@ const CACHE_NAME = 'static-cache-v1';
 
 // Add list of files to cache here.
 const FILES_TO_CACHE = [
-  '/offline.html',
+  '/index.html',
+  '/build/bundle.js',
+  '/build/bundle.css'
 ];
 
 self.addEventListener('install', (evt) => {
@@ -38,8 +40,32 @@ self.addEventListener('activate', (evt) => {
   self.clients.claim();
 });
 
+self.addEventListener('fetch', (e) => {
+  e.respondWith((async () => {
+    if (e.request.url.includes("/api/")) {
+      // We don't want to cache api calls, since we have IndexedDB and custom
+      // data synchronization mechanism.
+      return await fetch(e.request);
+    }
+    const r = await caches.match(e.request);
+    console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
+    if (r) { return r; }
+    const response = await fetch(e.request);
+    const cache = await caches.open(CACHE_NAME);
+    console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
+    cache.put(e.request, response.clone());
+    return response;
+  })());
+});
+
+/*
 self.addEventListener('fetch', (evt) => {
   console.log('[ServiceWorker] Fetch', evt.request.url);
+  if (evt.request.mode !== 'navigate') {
+    // Not a page navigation, bail.
+    return;
+  }
+  
   evt.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
     try {
@@ -61,3 +87,4 @@ self.addEventListener('fetch', (evt) => {
     }
   })());
 });
+*/

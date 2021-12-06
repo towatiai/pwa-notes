@@ -29,8 +29,9 @@ app.post("/api/notes/sync", async (req, res) => {
     .filter(n => !n._id)
     .map(n => ({ title: n.title, content: n.content }));
   
+  let insertResult, updateResult;
   try {
-    const [updateResult, insertResult] = await Promise.all(
+    [updateResult, insertResult] = await Promise.all(
       [Note.bulkWrite(operations), Note.insertMany(newNotes)]);
   } catch(e) {
     res.status(500);

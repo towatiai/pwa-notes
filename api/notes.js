@@ -3,8 +3,6 @@ const Subscription = require("../backend/subscription");
 const webpush = require("web-push");
 const webpushInit = require("../backend/webpush");
 
-webpushInit();
-
 module.exports = async (req, res) => {
 
     switch (req.method) {
@@ -17,6 +15,7 @@ module.exports = async (req, res) => {
             try {
                 const note = await new Note({ title: body.title, content: body.content }).save();
                 // Send notification to all subscribers
+                webpushInit();
                 const notification = { title: `New note: ${body.title}` };
                 const notifications = [];
                 const subscriptions = await Subscription.find();

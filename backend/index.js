@@ -1,8 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const Note = require("./note");
+const Subscription = require("./subscription");
 const path = require("path");
+const webpushInit = require("./webpush");
+const webpush = require("web-push");
 
+webpushInit();
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -59,6 +63,18 @@ app.post("/api/notes", async (req, res) => {
   } else {
     try {
       const note = await new Note({ title: body.title, content: body.content }).save();
+
+      const notification = { title: `New note: ${body.title}` };
+      const notifications = [];
+      const subscriptions = await Subscription.find();
+      subscriptions.forEach(sub => {
+        notifications.push(
+          webpush.sendNotification(sub, JSON.stringify(notification))
+            .catch(e => console.log('subscription expired '))
+        );
+      });
+      await Promise.all(notifications);
+
       res.json(note);
     } catch(e) {
       res.status(500);
@@ -92,6 +108,21 @@ app.delete("/api/notes/:id", async (req, res) => {
     res.json(result);
   } else {
     res.sendStatus(404);
+  }
+});
+
+app.post("/api/subscriptions", async (req, res) => {
+  const body = req.body;
+  if (!body.endpoint && !body.keys) {
+    res.status(400).send("Invalid request");
+  } else {
+    try {
+      const subscription = await new Subscription({ endpoint: body.endpoint, keys: body.keys }).save();
+      res.json(subscription);
+    } catch(e) {
+      console.log(e);
+      res.sendStatus(500);
+    }
   }
 });
 

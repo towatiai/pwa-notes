@@ -58,6 +58,14 @@ self.addEventListener('fetch', (e) => {
   })());
 });
 
+self.addEventListener('push', (e) => {
+  const data = e.data.json();
+  self.registration.showNotification(data.title, {
+    body: data.body,
+    icon: data.icon,
+  });
+});
+
 /*
 self.addEventListener('fetch', (evt) => {
   console.log('[ServiceWorker] Fetch', evt.request.url);

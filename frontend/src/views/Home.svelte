@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { push } from "svelte-spa-router";
     import noteService from "../services/notes";
+    import subscriptionService from '../services/subscriptions';
     import { fly } from "svelte/transition";
 
     import NoteCard from "../components/NoteCard.svelte";
@@ -9,6 +10,7 @@
     import { isOnline } from "../stores/connection.store";
 
     let notesList = [];
+    let notificationPermission = window.Notification.permission;
 
     const receiveNote = (note) => {
 		if (notes.some(x => x._id === note._id)) {
@@ -49,11 +51,26 @@
     const synchronize = async () => {
         noteService.synchronize(notesList);
     };
+
+    const requestNotification = async () => {
+        const permission = await Notification.requestPermission();
+        notificationPermission = permission;
+        const subscription = await subscriptionService.createSubscription();
+        if (subscription) {
+            console.log('subscription:', subscription);
+        }
+    }
 </script>
 
 <div class="p-4">
     <div class="flex justify-between mb-3">
         <h1 class="text-3xl">Notes</h1>
+        { #if notificationPermission !== 'granted' }
+        <button class="bg-gray-500 text-white px-4 py-2 rounded-2xl hover:bg-gray-700 duration-75"
+            on:click={() => requestNotification()}>
+            Enable notifications
+        </button>
+        { /if }
         { #if !$isOnline }
         <div class="flex text-gray-600">
             <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>

@@ -24,10 +24,11 @@ module.exports = async (req, res) => {
                 subscriptions.forEach(sub => {
                     notifications.push(
                         webpush.sendNotification(sub, JSON.stringify(notification))
+                            .catch(e => console.log('some subscription expired'))
                     );
                 });
                 await Promise.all(notifications);
-                res.json(subscriptions, notifications, note);
+                res.json(notifications, note);
             } catch (e) {
                 res.status(500);
                 res.json(e);

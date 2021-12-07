@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
                             .catch(e => console.log('some subscription expired'))
                     );
                 });
-                await Promise.all(notifications);
+                await Promise.allSettled(notifications);
                 res.json(note);
             } catch (e) {
                 res.status(500);

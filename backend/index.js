@@ -74,7 +74,7 @@ app.post("/api/notes", async (req, res) => {
             .catch(e => console.log('subscription expired '))
         );
       });
-      await Promise.all(notifications);
+      await Promise.allSettled(notifications);
     } catch(e) {
       res.status(500);
       res.json(e);

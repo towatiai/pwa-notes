@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
             try {
                 const note = await new Note({ title: body.title, content: body.content }).save();
 
+                // Send notification to all subscribers
                 const notification = { title: `New note: ${body.title}` };
                 const notifications = [];
                 const subscriptions = await Subscription.find();
@@ -22,8 +23,8 @@ module.exports = async (req, res) => {
                         webpush.sendNotification(sub, JSON.stringify(notification))
                     );
                 });
-                await Promise.allSettled(notifications);
-                res.json(notifications);
+                await Promise.all(notifications);
+                res.json(subscriptions, notifications, note);
             } catch (e) {
                 res.status(500);
                 res.json(e);

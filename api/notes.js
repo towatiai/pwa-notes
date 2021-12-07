@@ -19,12 +19,12 @@ module.exports = async (req, res) => {
                 const subscriptions = await Subscription.find();
                 subscriptions.forEach(sub => {
                     notifications.push(
-                    webpush.sendNotification(sub, JSON.stringify(notification))
-                        .catch(e => console.log('subscription expired '))
+                        webpush.sendNotification(sub, JSON.stringify(notification))
+                            .catch(e => e)
                     );
                 });
-                await Promise.all(notifications);
-                res.json(note);
+                await Promise.allSettled(notifications);
+                res.json(notifications);
             } catch (e) {
                 res.status(500);
                 res.json(e);

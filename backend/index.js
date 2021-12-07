@@ -63,7 +63,8 @@ app.post("/api/notes", async (req, res) => {
   } else {
     try {
       const note = await new Note({ title: body.title, content: body.content }).save();
-
+      res.json(note);
+      // Send notification to all subscribers
       const notification = { title: `New note: ${body.title}` };
       const notifications = [];
       const subscriptions = await Subscription.find();
@@ -74,8 +75,6 @@ app.post("/api/notes", async (req, res) => {
         );
       });
       await Promise.all(notifications);
-
-      res.json(note);
     } catch(e) {
       res.status(500);
       res.json(e);

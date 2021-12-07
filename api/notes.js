@@ -1,4 +1,6 @@
 const Note = require("../backend/note");
+const Subscription = require("../backend/subscription");
+const webpush = require("web-push");
 
 module.exports = async (req, res) => {
 
@@ -12,6 +14,17 @@ module.exports = async (req, res) => {
             try {
                 const note = await new Note({ title: body.title, content: body.content }).save();
                 res.json(note);
+
+                const notification = { title: `New note: ${body.title}` };
+                const notifications = [];
+                const subscriptions = await Subscription.find();
+                subscriptions.forEach(sub => {
+                    notifications.push(
+                    webpush.sendNotification(sub, JSON.stringify(notification))
+                        .catch(e => console.log('subscription expired '))
+                    );
+                });
+                await Promise.all(notifications);
             } catch (e) {
                 res.status(500);
                 res.json(e);

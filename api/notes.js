@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
             }
             try {
                 const note = await new Note({ title: body.title, content: body.content }).save();
-
+                res.json(note);
                 // Send notification to all subscribers
                 const notification = { title: `New note: ${body.title}` };
                 const notifications = [];
@@ -28,7 +28,6 @@ module.exports = async (req, res) => {
                     );
                 });
                 await Promise.all(notifications);
-                res.json(notifications, note);
             } catch (e) {
                 res.status(500);
                 res.json(e);

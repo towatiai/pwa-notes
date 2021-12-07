@@ -1,6 +1,9 @@
 const Note = require("../backend/note");
 const Subscription = require("../backend/subscription");
 const webpush = require("web-push");
+const webpushInit = require("./webpush");
+
+webpushInit();
 
 module.exports = async (req, res) => {
 

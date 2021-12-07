@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
                 subscriptions.forEach(sub => {
                     notifications.push(
                         webpush.sendNotification(sub, JSON.stringify(notification))
-                            .catch(e => e)
                     );
                 });
                 await Promise.allSettled(notifications);

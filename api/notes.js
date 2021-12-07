@@ -31,6 +31,7 @@ module.exports = async (req, res) => {
                 res.status(500);
                 res.json(e);
             }
+            break;
 
         case "GET":
             res.json(await Note.find({}));

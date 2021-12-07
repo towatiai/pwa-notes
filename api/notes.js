@@ -1,7 +1,7 @@
 const Note = require("../backend/note");
 const Subscription = require("../backend/subscription");
 const webpush = require("web-push");
-const webpushInit = require("./webpush");
+const webpushInit = require("../backend/webpush");
 
 webpushInit();
 
